@@ -4,9 +4,9 @@ Lymph node tumor metastasis is one of the most important prognostic factors in h
 
 ## Code
 
-HEV Finder is using a mask RCNN deep learning model, based on (https://github.com/BupyeongHealer/Mask_RCNN_tf_2.x). The detail of the Mask-RCNN implementation can be found in [code/maskrcnn_vessels](https://github.com/BIIFSweden/MariaUlvmar2020-1/tree/master/code/maskrcnn_vessels) and a notebook inspecting the vessel classification in [code/maskrcnn_vessels/samples/vessels/inspect_vessels_model.ipynb](https://github.com/BIIFSweden/MariaUlvmar2020-1/blob/master/code/maskrcnn_vessels/samples/vessels/inspect_vessels_model.ipynb).
+HEV Finder is using a mask RCNN deep learning model, based on [BupyeongHealer/Mask_RCNN_tf_2.x](https://github.com/BupyeongHealer/Mask_RCNN_tf_2.x). The detail of the Mask-RCNN implementation can be found in [code/maskrcnn_vessels](https://github.com/BIIFSweden/MariaUlvmar2020-1/tree/master/code/maskrcnn_vessels) and a notebook inspecting the vessel classification in [code/maskrcnn_vessels/samples/vessels/inspect_vessels_model.ipynb](https://github.com/BIIFSweden/MariaUlvmar2020-1/blob/master/code/maskrcnn_vessels/samples/vessels/inspect_vessels_model.ipynb).
 
-The HEV Finder user interface is built on PySimpleGUI and can be found in [code/HEV_Finder](https://github.com/BIIFSweden/MariaUlvmar2020-1/tree/master/code/HEV_Finder).
+The HEV Finder Graphical User Interface is built on PySimpleGUI and can be found in the [code/HEV_Finder](https://github.com/BIIFSweden/MariaUlvmar2020-1/tree/master/code/HEV_Finder) directory.
 
 ## Acknowledgement
 

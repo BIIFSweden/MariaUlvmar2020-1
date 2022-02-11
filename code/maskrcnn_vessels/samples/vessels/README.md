@@ -27,6 +27,6 @@ python3 vessel.py detect --dataset=/path/to/dataset --subset=stage1_test --weigh
 ```
 
 
-## Jupyter notebooks
-Two Jupyter notebooks are provided as well: `inspect_vessel_data.ipynb` and `inspect_vessel_model.ipynb`.
-They explore the dataset, run stats on it, and go through the detection process step by step.
+## Jupyter notebook
+A Jupyter notebook is provided as well: `inspect_vessel_model.ipynb`.
+It goes through the detection process step by step.
