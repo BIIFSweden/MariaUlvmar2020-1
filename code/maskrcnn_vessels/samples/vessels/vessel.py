@@ -54,6 +54,7 @@ from mrcnn.config import Config
 from mrcnn import utils
 from mrcnn import model as modellib
 from mrcnn import visualize
+from mrcnn import ModelDiagnoser
 
 # Path to trained weights file
 COCO_WEIGHTS_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
@@ -68,7 +69,7 @@ RESULTS_DIR = os.path.join(ROOT_DIR, "results/vessel/")
 
 # The dataset doesn't have a standard train/val split, so I picked
 # a variety of images to surve as a validation set.
-VAL_IMAGE_IDS = list(range(15))
+VAL_IMAGE_IDS = list(range(104))
 
 
 ############################################################
@@ -173,7 +174,7 @@ class VesselDataset(utils.Dataset):
         coco = COCO("{}/COCOannotations.json".format(dataset_dir))
         image_dir = dataset_dir
         # Load all classes or a subset?
-        class_ids = sorted(coco.getCatIds())
+        class_ids = sorted(coco.getCatIds())[:-1]
         image_ids = list(coco.imgs.keys())
 
         # Add classes
@@ -181,6 +182,16 @@ class VesselDataset(utils.Dataset):
             self.add_class("vessels", i, coco.loadCats(i)[0]["name"])
 
         # Add images
+        val_names = ["A4353-17 3A","A5050-12 B","A6488-18 2A","A5774-10 A","A13280-16 2C","A18356-04 F","A2010-16 C","A12843-16 2B","A13727-13 2A"]
+        VAL_IMAGE_IDS = []
+        for i in image_ids:
+            for name in val_names:
+                if name in coco.imgs[i]['file_name']:
+                    VAL_IMAGE_IDS.append(i)
+                    break
+        print ("val set:", len(VAL_IMAGE_IDS))
+        print ("total set:", len(image_ids))
+        total_annot = 0
         for i in image_ids:
             if (subset == "val" and i in VAL_IMAGE_IDS) or (subset != "val" and i not in VAL_IMAGE_IDS):
                 if coco.imgs[i]['file_name'][0] == "/":
@@ -192,6 +203,9 @@ class VesselDataset(utils.Dataset):
                     height=coco.imgs[i]["height"],
                     annotations=coco.loadAnns(coco.getAnnIds(
                         imgIds=[i], catIds=class_ids, iscrowd=None)))
+                total_annot += len(coco.loadAnns(coco.getAnnIds(
+                        imgIds=[i], catIds=class_ids, iscrowd=None)))
+        print ("Found {0} images in db {1} - {2} annotations".format(len(self.image_info), subset, total_annot))
                 
     def load_mask(self, image_id):
         """Load instance masks for the given image.
@@ -269,7 +283,7 @@ class VesselDataset(utils.Dataset):
 #  Training
 ############################################################
 
-def train(model, dataset_dir, subset):
+def train(model, dataset_dir, subset, logDir):
     """Train the model."""
     # Training dataset.
     dataset_train = VesselDataset()
@@ -323,14 +337,22 @@ def train(model, dataset_dir, subset):
     #            augmentation=augmentation,
     #            layers='heads', 
     #            custom_callbacks=[])
-
+    
+    #images_callback1 = ModelDiagnoser.ModelDiagnoser(
+    #    dataset= dataset_val,
+    #    config= VesselInferenceConfig(),
+    #    output_dir= logDir + "/img_train/"
+    #)
     print("Train all layers")
+    import warnings
+    warnings.filterwarnings("ignore")
+    
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
-                epochs=400,
-                augmentation=augmentation,
+                epochs=1200,
+                augmentation= augmentation,
                 layers='all', 
-                custom_callbacks=[])
+                custom_callbacks=[])# images_callback1])
 
 
 ############################################################
